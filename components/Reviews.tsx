@@ -26,31 +26,14 @@ const Template: React.FC<{ name: string; rank: string; examYear: string; imageUr
   );
 };
 
-// Array of Template Details
-const templateDetails = [
-  {
-    name: "Ishita Rathi",
-    rank: "AIR 8",
-    examYear: "UPSC CSE 2021",
-    imageUrl: "https://www.insightsonindia.com/wp-content/uploads/2021/10/Ishita-Rathi-AIR-8-UPSC-CSE-2021-Topper.jpg",
-    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" // Example URL
-  },
-  {
-    name: "John Doe",
-    rank: "AIR 5",
-    examYear: "UPSC CSE 2022",
-    imageUrl: "https://example.com/john_doe.jpg",
-    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" // Example URL
-  },
-  // Add more details here as needed
-];
 
+import { templateDetails } from '@/app/api/data/data';
 // Reviews Component
 const Reviews: React.FC = () => {
   return (
-    <div className="bg-violet-800 min-h-screen p-4">
+    <div className="bg-violet-800 p-4">
       <h1 className="text-3xl font-bold text-white text-center my-6">Toppers from CheckIAS</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid gap-6 grid-cols-[repeat(auto-fill,minmax(200px,1fr))] place-content-center px-[3%]">
         {templateDetails.map((details, index) => (
           <Template
             key={index}

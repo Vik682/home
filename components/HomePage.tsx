@@ -11,13 +11,13 @@ const HomePage: React.FC = () => {
   const router = useRouter();
 
   const handleViewEvaluationPlans = () => {
-    router.push('/Home/EvaluationPlans');
+    router.push('/EvaluationPlans');
   };
 
   return (
-    <div className="bg-white relative">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div className="text-center">
+    <div className="bg-white h-screen flex items-center w-screen">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-24 flex w-[90vw]">
+        <div className="text-center flex flex-col items-center justify-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
             Concerned about your UPSC mains?
           </h1>
@@ -39,11 +39,11 @@ const HomePage: React.FC = () => {
             </button>
           </div>
         </div>
-        <div className="absolute bottom-0 right-0 -mt-16">
+        <div className="mt-16">
           <img
-            src="https://www.convertias.com/images/hero_illustration.svg"
+            src="hero_illustration.svg"
             alt="Illustration"
-            className="w-48 sm:w-64"
+            className="w-[400px] sm:w-[800px]"
           />
         </div>
       </div>

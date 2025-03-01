@@ -1,8 +1,11 @@
 // components/Home/Csat.tsx
-
-'use client'; // Mark this as a Client Component
+'use client';
 
 import React from 'react';
+import CSATCard from './CSATCard';
+import { CSATPlan } from '@/types';
+import { CSATPlans } from '@/app/api/data/data';
+
 
 const Csat: React.FC = () => {
   return (
@@ -20,39 +23,11 @@ const Csat: React.FC = () => {
         </button>
       </div>
 
-      {/* Flex Container for the Two CSAT Cards */}
+      {/* Flex Container for CSAT Cards */}
       <div className="flex gap-4">
-        {/* CSAT 2025 (New Batch) Card */}
-        <div className="bg-white rounded-lg shadow-md p-6 w-96">
-          <h2 className="text-xl font-bold mb-2">CSAT - 2025 (New Batch)</h2>
-          <p className="text-gray-600 text-sm mb-4">CSAT - Comprehensive Preparation! (Batch Starting from 14th Sept)</p>
-          <p className="text-gray-600 text-sm mb-4">₹2,499 <span className="line-through">₹6,999</span> (Including GST)</p>
-          <div className="flex items-center gap-2 mb-4">
-            <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM14 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6z"></path>
-            </svg>
-            <p className="text-gray-600 text-sm">14 likes</p>
-          </div>
-          <button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
-            View Details & Subscribe
-          </button>
-        </div>
-
-        {/* CSAT 2025 Card */}
-        <div className="bg-white rounded-lg shadow-md p-6 w-96">
-          <h2 className="text-xl font-bold mb-2">CSAT - 2025</h2>
-          <p className="text-gray-600 text-sm mb-4">CSAT - Comprehensive Preparation!</p>
-          <p className="text-gray-600 text-sm mb-4">₹2,999 <span className="line-through">₹6,999</span> (Including GST)</p>
-          <div className="flex items-center gap-2 mb-4">
-            <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM14 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6z"></path>
-            </svg>
-            <p className="text-gray-600 text-sm">88 likes</p>
-          </div>
-          <button className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded">
-            Seats Full
-          </button>
-        </div>
+        {CSATPlans.map((plan, index) => (
+          <CSATCard key={index} plan={plan} />
+        ))}
       </div>
     </div>
   );

@@ -3,15 +3,9 @@
 'use client'; // Mark this as a Client Component
 
 import React from 'react';
+import { Note } from '@/types';
+import { notesData } from '@/app/api/data/data';
 
-// Define the Note Type
-interface Note {
-  title: string;
-  description: string;
-  price: string;
-  originalPrice: string;
-  likes: number;
-}
 
 // NoteCard Component
 const NoteCard: React.FC<{ note: Note }> = ({ note }) => {
@@ -35,67 +29,6 @@ const NoteCard: React.FC<{ note: Note }> = ({ note }) => {
   );
 };
 
-// Note Data with Additional Entries
-const notesData: Note[] = [
-  {
-    title: "Mains Diamonds - CA Model Answers",
-    description: "Model Answers from Current Affairs Topics. Must for Revision (Monthly Compilation)",
-    price: "₹1,999",
-    originalPrice: "₹4,999",
-    likes: 613,
-  },
-  {
-    title: "Mains 2025 Diamonds (New)",
-    description: "Model Answers from Current Affairs Topics. Must for Revision (Monthly Compilation)",
-    price: "₹1,999",
-    originalPrice: "₹4,999",
-    likes: 254,
-  },
-  {
-    title: "Prelims Strategy Guide",
-    description: "Comprehensive strategy guide for the upcoming Prelims. Includes tips and resources.",
-    price: "₹1,499",
-    originalPrice: "₹3,499",
-    likes: 389,
-  },
-  {
-    title: "Essay Writing Techniques",
-    description: "Master essay writing with expert techniques and sample essays.",
-    price: "₹899",
-    originalPrice: "₹2,499",
-    likes: 198,
-  },
-  {
-    title: "Essay Writing Techniques",
-    description: "Master essay writing with expert techniques and sample essays.",
-    price: "₹899",
-    originalPrice: "₹2,499",
-    likes: 198,
-  },
-  {
-    title: "Essay Writing Techniques",
-    description: "Master essay writing with expert techniques and sample essays.",
-    price: "₹899",
-    originalPrice: "₹2,499",
-    likes: 198,
-  },
-  {
-    title: "Essay Writing Techniques",
-    description: "Master essay writing with expert techniques and sample essays.",
-    price: "₹899",
-    originalPrice: "₹2,499",
-    likes: 198,
-  },
-  {
-    title: "Essay Writing Techniques",
-    description: "Master essay writing with expert techniques and sample essays.",
-    price: "₹899",
-    originalPrice: "₹2,499",
-    likes: 198,
-  },
-
-  // Add more notes here if needed
-];
 
 // Notes Component
 const Notes: React.FC = () => {

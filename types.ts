@@ -14,3 +14,10 @@ export interface Note {
   originalPrice: string;
   likes: number;
 }
+
+export interface SubmittedAnswer {
+  id: number;          // Unique identifier for the answer
+  title: string;       // Title of the answer
+  date: string;        // Date of submission (in string format)
+  content: string;     // Content of the answer
+}

@@ -1,4 +1,4 @@
-import { CSATPlan, Note } from "@/types";
+import { CSATPlan, Note ,SubmittedAnswer} from "@/types";
 
 export const plans = [
   {
@@ -398,4 +398,12 @@ export const MAWPlan: CSATPlan[] = [
     likes: "88 likes",
     open: false,
   },
+];
+
+
+// Dummy Data for Submitted Answers
+export const submittedAnswers:SubmittedAnswer[] = [
+  // { id: 1, title: "Answer 1 - GS Paper 1", date: "2025-02-25", content: "Sample answer content for GS Paper 1" },
+  // { id: 2, title: "Answer 2 - GS Paper 2", date: "2025-02-24", content: "Sample answer content for GS Paper 2" },
+  // { id: 3, title: "Answer 3 - GS Paper 3", date: "2025-02-23", content: "Sample answer content for GS Paper 3" },
 ];

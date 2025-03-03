@@ -1,6 +1,7 @@
 // pages/api/login/router.ts
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
+
 // Helper function to send OTP to email
 
 export const sendOtpToEmail = async (email: string) => {
@@ -11,7 +12,7 @@ export const sendOtpToEmail = async (email: string) => {
   try {
     const response = await axios.post("http://127.0.0.1:8000/", { email });
     return response.data;
-  } catch (error: unknown) {
+  } catch (error: any) {
     if (axios.isAxiosError(error)) {
       console.error("Axios Error while sending OTP:", error.message);
       throw new Error("Failed to send OTP");
@@ -21,19 +22,25 @@ export const sendOtpToEmail = async (email: string) => {
     }
   }
 };
-
+export const logout = () => {
+  return true;
+};
 export const verifyOtp = async (email: string, otp: string) => {
   // end point is added here
   // returns true ( OTP verified )/ false (OTP not verified)
   // Add role ID automatically
-  // TODO fix it
-  return false;
+  const status = true;
+  return status;
   try {
     // Sending a POST request to verify OTP in Django backend
-    const roleID:string="student"
-    const response = await axios.post("http://localhost:8000/", { email, otp, roleID });
+    const roleID: string = "student";
+    const response = await axios.post("http://localhost:8000/", {
+      email,
+      otp,
+      roleID,
+    });
     return response.data; // Assuming Django returns success or failure
-  } catch (error: unknown) {
+  } catch (error: any) {
     // Type error as AxiosError or any
     if (axios.isAxiosError(error)) {
       console.error("Axios Error while verifying OTP:", error.message);

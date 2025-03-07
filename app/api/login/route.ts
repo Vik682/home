@@ -1,17 +1,17 @@
-// pages/api/login/router.ts
-import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
+import Cookies from "js-cookie"; // Import js-cookie
 
 // Helper function to send OTP to email
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const sendOtpToEmail = async (email: string) => {
   // end point is added here
   // returns true ( OTP send )/ false (OTP send failed)
   // TODO fix it
-  return true;
   try {
-    const response = await axios.post("http://127.0.0.1:8000/", { email });
-    return response.data;
+    console.log("Payload: ", { email });
+    const response = await axios.post(`${BACKEND_URL}/mail/send/`, { email });
+    return true;
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
       console.error("Axios Error while sending OTP:", error.message);
@@ -21,25 +21,27 @@ export const sendOtpToEmail = async (email: string) => {
       throw new Error("Failed to send OTP");
     }
   }
+  return false;
 };
 export const logout = () => {
+  Cookies.remove("idToken");
   return true;
 };
+
 export const verifyOtp = async (email: string, otp: string) => {
   // end point is added here
   // returns true ( OTP verified )/ false (OTP not verified)
   // Add role ID automatically
-  const status = true;
-  return status;
   try {
     // Sending a POST request to verify OTP in Django backend
-    const roleID: string = "student";
-    const response = await axios.post("http://localhost:8000/", {
+    const role_id: string = "student";
+    const response = await axios.post(`${BACKEND_URL}/auth/validate/`, {
       email,
       otp,
-      roleID,
+      role_id,
     });
-    return response.data; // Assuming Django returns success or failure
+    Cookies.set("idToken", response.data.idToken, { expires: 7 });
+    return true; // Assuming Django returns success or failure
   } catch (error: any) {
     // Type error as AxiosError or any
     if (axios.isAxiosError(error)) {
@@ -50,6 +52,7 @@ export const verifyOtp = async (email: string, otp: string) => {
       throw new Error("Failed to verify OTP");
     }
   }
+  return false;
 };
 
 // export async function login(req: NextRequest) {

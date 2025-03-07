@@ -1,9 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios"; // Ensure axios is installed and imported
 import { sendOtpToEmail, verifyOtp, logout } from "@/app/api/login/route";
 import { useAuth } from "@/context/context";
+import { getProfile, setProfile } from "@/app/api/profile/route";
 const Header = () => {
   const { isLoggedIn, setIsLoggedIn } = useAuth();
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
@@ -13,7 +14,7 @@ const Header = () => {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
-  const [profileExist, setProfileExist] = useState(true);
+  const [profileExist, setProfileExist] = useState(false);
   const [name, setName] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [optionalSubject, setOptionalSubject] = useState("");
@@ -32,16 +33,49 @@ const Header = () => {
   const toggleAnswerEvalMode = () => {
     setAnswerEvalMode(!answerEvalMode);
   };
-  const Login = () => {
-    setIsLoggedIn(true);
-    console.log("Login called", isLoggedIn);
+  const Login = async () => {
+    try {
+      setIsLoggedIn(await getProfile());
+      setProfileExist(await getProfile());
+    } catch (error: any) {
+      console.log(error);
+    }
   };
-  const Signup = () => {
-    setProfileExist(true);
+
+  useEffect(() => {
+    Login();
+  }, []);
+  const Signup = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (
+      name === "" ||
+      mobileNumber === "" ||
+      optionalSubject === "" ||
+      targetYear === "" ||
+      medium === "" ||
+      state === ""
+    ) {
+      setError("All fields are mandatory.");
+    } else {
+      const response = await setProfile({
+        name: name,
+        phone_number: mobileNumber,
+        attempt: targetYear,
+        medium: medium,
+      });
+
+      if (response) {
+        setMessage("Profile created successfully!");
+        setProfileExist(true);
+      } else {
+        setError("Failed to create profile.");
+      }
+    }
   };
+
   const Logout = () => {
-    setIsLoggedIn(false);
-    console.log("Logout called", isLoggedIn);
+    setIsLoggedIn(logout());
+    window.location.reload();
   };
 
   const setOtpField = (e: any) => {
@@ -54,8 +88,8 @@ const Header = () => {
     event.preventDefault();
     setError(null);
     setMessage(null);
-    setOtpSent(false);
-    setOtpSent(await sendOtpToEmail(email));
+    setOtpSent(true);
+    await sendOtpToEmail(email);
   };
 
   // Handle Continue button click
@@ -66,10 +100,21 @@ const Header = () => {
     if (otp.length != 6) {
       setError("Invalid OTP Length");
     }
-    if (await verifyOtp(email, otp)) {
+    let result = false;
+    try {
+      result = await verifyOtp(email, otp);
+    } catch (error: any) {
+      console.log(error);
+    }
+    if (result) {
       setMessage("OTP verified successfully");
       setLoginModalOpen(false);
       Login();
+      try {
+        setProfileExist(await getProfile());
+      } catch (error: any) {
+        console.log(error);
+      }
     } else {
       setError("Invalid OTP");
     }
@@ -94,52 +139,54 @@ const Header = () => {
         <ul className="flex flex-wrap space-x-10 ml-auto">
           {isLoggedIn ? (
             <li className="flex justify-center flex-col">
-              <button
-                onClick={() => toggleAnswerEvalMode()}
-                className="font-medium hover:text-blue-600 px-3 py-1 rounded-sm font-medium hover:bg-orange-200 flex items-center"
-              >
-                Answer Evaluation
-                <svg
-                  className="ml-2 w-4 h-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+              <div>
+                <button
+                  onClick={() => toggleAnswerEvalMode()}
+                  className="font-medium hover:text-blue-600 px-3 py-1 rounded-sm font-medium hover:bg-orange-200 flex items-center"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-              {answerEvalMode && (
-                <ul className="absolute top-[3em] bg-gray-100 text-gray-500 px-3 py-1 rounded-sm font-medium hover:bg-gray-200 flex flex-col items-center">
-                  <li>
-                    <button
-                      onClick={() => {
-                        router.push("/SubmitAnswer");
-                        toggleAnswerEvalMode();
-                      }}
-                      id="submit-answer-button"
-                    >
-                      Submit Answer
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => {
-                        router.push("/Answer");
-                        toggleAnswerEvalMode();
-                      }}
-                      id="answer-button"
-                    >
-                      My Answer
-                    </button>
-                  </li>
-                </ul>
-              )}
+                  Answer Evaluation
+                  <svg
+                    className="ml-2 w-4 h-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                {answerEvalMode && (
+                  <ul className="absolute top-[3em] bg-gray-100 text-gray-500 px-3 py-1 rounded-sm font-medium hover:bg-gray-200 flex flex-col items-center">
+                    <li>
+                      <button
+                        onClick={() => {
+                          router.push("/SubmitAnswer");
+                          toggleAnswerEvalMode();
+                        }}
+                        id="submit-answer-button"
+                      >
+                        Submit Answer
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => {
+                          router.push("/Answer");
+                          toggleAnswerEvalMode();
+                        }}
+                        id="answer-button"
+                      >
+                        My Answer
+                      </button>
+                    </li>
+                  </ul>
+                )}
+              </div>
             </li>
           ) : (
             <></>
@@ -309,13 +356,21 @@ const Header = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       className="mb-4 mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
-
-                    <button
-                      type="submit"
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    >
-                      Send OTP
-                    </button>
+                    {isOtpSent ? (
+                      <button
+                        type="submit"
+                        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      >
+                        Sending
+                      </button>
+                    ) : (
+                      <button
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      >
+                        Send OTP
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <div className="w-full flex flex-col items-center">
@@ -350,10 +405,7 @@ const Header = () => {
                 alt="IAS Symbol"
                 className="h-12 w-12 mb-4" // Adjust logo size if needed
               />
-              <form
-                className="w-full flex flex-col items-center"
-                onSubmit={Signup}
-              >
+              <form className="w-full flex flex-col items-center">
                 <div className="mb-4 w-full">
                   <div className="flex mb-3">
                     <input
@@ -441,12 +493,14 @@ const Header = () => {
                   </div>
                 </div>
                 <button
-                  type="submit"
+                  onClick={Signup}
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-"
                 >
                   Sign Up
                 </button>
               </form>
+              {error && <p className="text-red-500 mt-2">{error}</p>}
+              {message && <p className="text-green-500 mt-2">{message}</p>}
             </div>
           </div>
         </div>

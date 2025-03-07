@@ -76,7 +76,7 @@ const Header = () => {
   };
 
   return (
-    <div className="bg-white shadow-md flex h-25 px-4 py-3 z-5">
+    <div className="bg-white shadow-md flex h-25 px-4 py-3 z-15">
       {/* Top section with login button */}
       <div className="flex items-center justify-between h-1/4">
         <div className="flex items-center">

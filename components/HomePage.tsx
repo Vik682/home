@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="bg-white h-screen flex items-center w-screen">
+    <div className="bg-white flex items-center w-screen">
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-24 flex w-[90vw]">
         <div className="text-center flex flex-col items-center justify-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
